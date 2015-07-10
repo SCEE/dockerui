@@ -43,7 +43,7 @@ logLevel = LOG_INFO;
 autoWatch = false;
 
 // polling interval in ms (ignored on OS that support inotify)
-autoWatchInterval = 0;
+autoWatchInterval =0;
 
 // Start these browsers, currently available:
 // - Chrome
@@ -52,7 +52,7 @@ autoWatchInterval = 0;
 // - Opera
 // - Safari
 // - PhantomJS
-browsers = ['Chrome'];
+browsers = [];
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit

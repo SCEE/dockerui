@@ -2,7 +2,6 @@ angular.module('dashboard', [])
 .controller('DashboardController', ['$scope', 'Container', 'Image', 'Settings', 'LineChart', function($scope, Container, Image, Settings, LineChart) {
     $scope.predicate = '-Created';
     $scope.containers = [];
-
     var getStarted = function(data) {
         $scope.totalContainers = data.length;
         LineChart.build('#containers-started-chart', data, function(c) { return new Date(c.Created * 1000).toLocaleDateString(); });
