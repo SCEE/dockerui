@@ -9,7 +9,6 @@ angular.module('containers', [])
                 ViewSpinner.spin();
                 Container.query(data, function (d) {
                     $scope.containers = d.map(function (item) {
-                        console.log(item);
                         //console.log(item);
                         return new ContainerViewModel(item);
                     });
@@ -17,7 +16,18 @@ angular.module('containers', [])
                 });
             };
 
-            var executeAction = function( c, action, msg) {
+            var executeAction = function( cID, action, msg) {
+
+                var c;
+
+                angular.forEach($scope.containers, function (item) {
+
+                    if (item.Id === cID) {
+                        c = item;
+                        return;
+                    }
+                });
+
                 ViewSpinner.spin();
                 var counter = 0;
 
@@ -33,7 +43,6 @@ angular.module('containers', [])
 
                 if (action === Container.start) {
                     Container.get({id: c.Id}, function (d) {
-                        console.log('Starting container_id:' + c.Id );
                         c = d;
                         counter = counter + 1;
                         action({id: c.Id, HostConfig: c.HostConfig || {}}, function (d) {
@@ -75,7 +84,7 @@ angular.module('containers', [])
 
                 angular.forEach(items, function (c) {
                     if (c.Checked) {
-                        executeAction(c, action, msg);
+                        executeAction(c.Id, action, msg);
                     }
                 });
             };
@@ -91,9 +100,9 @@ angular.module('containers', [])
                 update({all: Settings.displayAll ? 1 : 0});
             };
 
-            $scope.startAction = function (key) {
+            $scope.startAction = function ( containerId) {
 
-                executeAction( $scope.containers[key], Container.start, "Started");
+                executeAction( containerId, Container.start, "Started");
             };
 
             $scope.startSelectedAction = function () {
@@ -101,10 +110,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.start, "Started");
             };
 
-            $scope.stopAction = function (key) {
+            $scope.stopAction = function (containerId) {
 
-                console.log($scope.containers[key]);
-                executeAction($scope.containers[key], Container.stop, "Stopped");
+                executeAction(containerId, Container.stop, "Stopped");
             };
 
             $scope.stopSelectedAction = function () {
@@ -112,9 +120,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.stop, "Stopped");
             };
 
-            $scope.restartAction = function (key) {
+            $scope.restartAction = function (containerId) {
 
-                executeAction($scope.containers[key],Container.restart, "Restarted");
+                executeAction(containerId,Container.restart, "Restarted");
             };
 
             $scope.restartSelectedAction = function () {
@@ -122,9 +130,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.restart, "Restarted");
             };
 
-            $scope.killAction = function (key) {
+            $scope.killAction = function (containerId) {
 
-                executeAction($scope.containers[key], Container.kill, "Killed");
+                executeAction(containerId, Container.kill, "Killed");
             };
 
             $scope.killSelectedAction = function () {
@@ -132,9 +140,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.kill, "Killed");
             };
 
-            $scope.pauseAction = function (key) {
+            $scope.pauseAction = function (containerId) {
 
-                executeAction($scope.containers[key], Container.pause, "Paused");
+                executeAction(containerId, Container.pause, "Paused");
             };
 
             $scope.pauseSelectedAction = function () {
@@ -142,9 +150,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.pause, "Paused");
             };
 
-            $scope.unpauseAction = function (key) {
+            $scope.unpauseAction = function (containerId) {
 
-                executeAction($scope.containers[key], Container.unpause, "Unpaused");
+                executeAction(containerId, Container.unpause, "Unpaused");
             };
 
             $scope.unpauseSelectedAction = function () {
@@ -157,9 +165,9 @@ angular.module('containers', [])
                 batch($scope.containers, Container.remove, "Removed");
             };
 
-            $scope.removeAction = function (key) {
+            $scope.removeAction = function (containerId) {
 
-                executeAction($scope.containers[key], Container.remove, "Removed");
+                executeAction(containerId, Container.remove, "Removed");
             };
 
             $scope.checkStatus = function ( text ){

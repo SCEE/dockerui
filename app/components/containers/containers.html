@@ -49,25 +49,25 @@
                     <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
 
                         <li ng-if="checkStatus( container.Status ) == 'died'">
-                            <a tabindex="-1" href="" ng-click="startAction( key )">Start</a>
+                            <a tabindex="-1" href="" ng-click="startAction( container.Id )">Start</a>
                         </li>
                         <li ng-if="checkStatus( container.Status ) == 'running'">
-                            <a tabindex="-1" href="" ng-click="stopAction(key)">Stop</a>
+                            <a tabindex="-1" href="" ng-click="stopAction(container.Id)">Stop</a>
                         </li>
                         <li ng-if="checkStatus( container.Status ) == 'running'">
-                            <a tabindex="-1" href="" ng-click="pauseAction(key)">Pause</a>
+                            <a tabindex="-1" href="" ng-click="pauseAction(container.Id)">Pause</a>
                         </li>
                         <li>
-                            <a tabindex="-1" href="" ng-click="restartAction(key)">Restart</a>
+                            <a tabindex="-1" href="" ng-click="restartAction(container.Id)">Restart</a>
                         </li>
                         <li ng-if="checkStatus( container.Status ) == 'paused'">
-                            <a tabindex="-1" href="" ng-click="unpauseAction(key)">Unpause</a>
+                            <a tabindex="-1" href="" ng-click="unpauseAction(container.Id)">Unpause</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a tabindex="-1" href="" ng-click="unpauseAction(key)">Logs</a></li>
+                        <li><a tabindex="-1" href="#/containers/{{ container.Id }}/logs">Logs</a></li>
                         <li class="divider"></li>
-                        <li><a tabindex="-1" href="" ng-click="killAction(key)">Kill</a></li>
-                        <li><a tabindex="-1" href="" ng-click="removeAction(key)">Remove</a></li>
+                        <li><a tabindex="-1" href="" ng-click="killAction(container.Id)">Kill</a></li>
+                        <li><a tabindex="-1" href="" ng-click="removeAction(container.Id)">Remove</a></li>
                     </ul>
 
                 </div>
