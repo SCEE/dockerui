@@ -18,4 +18,5 @@ function ContainerViewModel(data) {
    this.Status = data.Status;
    this.Checked = false;
    this.Names = data.Names;
+   this.Ports = data.Ports;
 }

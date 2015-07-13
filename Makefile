@@ -29,8 +29,9 @@ run:
 run-dev:
 	-docker stop dockerui
 	-docker rm dockerui
-	docker run -d  -p $(PORT):9000 -v /var/run/docker.sock:/docker.sock -v /workspace/dockerui/dist/angular.js:/angular.js -v /workspace/dockerui/dist/assets:/assets -v /workspace/dockerui/dist/dockerui.css:/dockerui.css -v /workspace/dockerui/dist/dockerui.js:/dockerui.js -v /workspace/dockerui/dist/index.html:/index.html -v /workspace/dockerui/dist/templates:/templates --name dockerui dockerui -e /docker.sock
-
+	docker run -d  -p $(PORT):9000 -v /var/run/docker.sock:/docker.sock -v /workspace/dockerui:/app --name dockerui dockerui -e /docker.sock
+	grunt watch:all
+	
 stop:
 	-docker stop dockerui
 	-docker rm dockerui

@@ -2,44 +2,71 @@
 <h2>Containers:</h2>
 
 <div>
+
     <ul class="nav nav-pills pull-left">
         <li class="dropdown">
-            <a class="dropdown-toggle" id="drop4" role="button" data-toggle="dropdown" data-target="#">Actions <b class="caret"></b></a>
+            <a class="dropdown-toggle" id="drop4" role="button" data-toggle="dropdown" data-target="#">Bulk action <b class="caret"></b></a>
             <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
-                <li><a tabindex="-1" href="" ng-click="startAction()">Start</a></li>
-                <li><a tabindex="-1" href="" ng-click="stopAction()">Stop</a></li>
-                <li><a tabindex="-1" href="" ng-click="restartAction()">Restart</a></li>
-                <li><a tabindex="-1" href="" ng-click="killAction()">Kill</a></li>
-                <li><a tabindex="-1" href="" ng-click="pauseAction()">Pause</a></li>
-                <li><a tabindex="-1" href="" ng-click="unpauseAction()">Unpause</a></li>
-                <li><a tabindex="-1" href="" ng-click="removeAction()">Remove</a></li>
+                <li><a tabindex="-1" href="" ng-click="startSelectedAction()">Start</a></li>
+                <li><a tabindex="-1" href="" ng-click="stopSelectedAction()">Stop</a></li>
+                <li><a tabindex="-1" href="" ng-click="restartSelectedAction()">Restart</a></li>
+                <li><a tabindex="-1" href="" ng-click="killSelectedAction()">Kill</a></li>
+                <li><a tabindex="-1" href="" ng-click="pauseSelectedAction()">Pause</a></li>
+                <li><a tabindex="-1" href="" ng-click="unpauseSelectedAction()">Unpause</a></li>
+                <li><a tabindex="-1" href="" ng-click="removeSelectedAction()">Remove</a></li>
             </ul>
         </li>
     </ul>
-
     <div class="pull-right">
-        <input type="checkbox" ng-model="displayAll" id="displayAll" ng-change="toggleGetAll()"/> <label for="displayAll">Display All</label>
-    </div>
+        <div class="btn-group">
+            <input type="text" class="form-control" id="search-container" placeholder="Search container" >
+
+        </div>
+        <div class="btn-group">
+            <input type="checkbox" ng-model="displayAll" id="displayAll" ng-change="toggleGetAll()"/> <label for="displayAll">Display All</label>
+        </div>
+     </div>
 </div>
 <table class="table table-striped">
     <thead>
         <tr>
             <th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" /> Action</th>
             <th>Name</th>
-            <th>Image</th>
-            <th>Command</th>
-            <th>Created</th>
+            <th>IP/Port</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="container in containers|orderBy:predicate">
+        <tr ng-repeat="(key, container) in containers|orderBy:Status|orderBy:container">
             <td><input type="checkbox" ng-model="container.Checked" /></td>
-            <td><a href="#/containers/{{ container.Id }}/">{{ container|containername}}</a></td>
-            <td><a href="#/images/{{ container.Image }}/">{{ container.Image }}</a></td>
-            <td>{{ container.Command|truncate:40 }}</td>
-            <td>{{ container.Created|getdate }}</td>
-            <td><span class="label label-{{ container.Status|statusbadge }}">{{ container.Status }}</span></td>
+            <td><a href="#/containers/{{ container.Id }}/" tooltips tooltip-html="Created: {{ container.Created|getdate }}<br />Command: {{ container.Command|truncate:40 }} <br />Id: {{ container.Id }}">{{ container|containername}}</a></td>
+            <td><div ng-repeat="port in container.Ports">{{ port.PrivatePort }} -> {{ port.PublicPort }}</div></td>
+            <td><span class="label btn=primary label-{{ container.Status|statusbadge }}">{{ container.Status }}</span></td>
+            <td>
+                <div class="dropdown">
+                    <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" dropdown-toggle aria-labelledby="drop4">Action <span class="caret"></span></button>
+                    <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+
+                        <li ng-if="checkStatus( container.Status ) == 'died'"><a tabindex="-1" href="" ng-click="startAction( key )">Start</a></li>
+                        <li ng-if="checkStatus( container.Status ) == 'running'"><a tabindex="-1" href="" ng-click="stopAction(key)">Stop</a></li>
+                        <li ng-if="checkStatus( container.Status ) == 'running'"><a tabindex="-1" href="" ng-click="pauseAction(key)">Pause</a></li>
+                        <li><a tabindex="-1" href="" ng-click="restartAction(key)">Restart</a></li>
+                        <li ng-if="checkStatus( container.Status ) == 'paused'">
+                            <a tabindex="-1" href="" ng-click="unpauseAction(key)">Unpause</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" href="" ng-click="unpauseAction(key)">Logs</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" href="" ng-click="killAction(key)">Kill</a></li>
+                        <li><a tabindex="-1" href="" ng-click="removeAction(key)">Remove</a></li>
+                    </ul>
+
+                </div>
+            </td>
         </tr>
     </tbody>
 </table>
+<script type="text/ng-template" id="myTooltipTemplate.html">
+    <span>Special Tooltip with <strong>markup</strong> and {{ dynamicTooltipText }}</span>
+</script>
