@@ -1,3 +1,4 @@
+
 .PHONY: build run
 
 .SUFFIXES:
@@ -29,7 +30,7 @@ run:
 run-dev:
 	-docker stop dockerui
 	-docker rm dockerui
-	docker run -d  -p $(PORT):9000 -v /var/run/docker.sock:/docker.sock -v /workspace/dockerui:/app --name dockerui dockerui -e /docker.sock
+	docker run -d  -p $(PORT):9000 -v /var/run/docker.sock:/docker.sock -v `pwd`:/app --name dockerui dockerui -e /docker.sock
 	grunt watch:all
 	
 stop:
