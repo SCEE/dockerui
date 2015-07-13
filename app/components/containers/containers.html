@@ -19,7 +19,7 @@
     </ul>
     <div class="pull-right">
         <div class="btn-group">
-            <input type="text" class="form-control" id="search-container" placeholder="Search container" >
+            <input type="text" class="form-control" id="search-container" placeholder="Search container" ng-model="query" >
 
         </div>
         <div class="btn-group">
@@ -38,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="(key, container) in containers|orderBy:Status|orderBy:container">
+        <tr ng-repeat="(key, container) in containers|filter: queryFilter|orderBy:Status|orderBy:container">
             <td><input type="checkbox" ng-model="container.Checked" /></td>
             <td><a href="#/containers/{{ container.Id }}/" tooltips tooltip-html="Created: {{ container.Created|getdate }}<br />Command: {{ container.Command|truncate:40 }} <br />Id: {{ container.Id }}">{{ container|containername}}</a></td>
             <td><div ng-repeat="port in container.Ports">{{ port.PrivatePort }} -> {{ port.PublicPort }}</div></td>
@@ -48,10 +48,18 @@
                     <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" dropdown-toggle aria-labelledby="drop4">Action <span class="caret"></span></button>
                     <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
 
-                        <li ng-if="checkStatus( container.Status ) == 'died'"><a tabindex="-1" href="" ng-click="startAction( key )">Start</a></li>
-                        <li ng-if="checkStatus( container.Status ) == 'running'"><a tabindex="-1" href="" ng-click="stopAction(key)">Stop</a></li>
-                        <li ng-if="checkStatus( container.Status ) == 'running'"><a tabindex="-1" href="" ng-click="pauseAction(key)">Pause</a></li>
-                        <li><a tabindex="-1" href="" ng-click="restartAction(key)">Restart</a></li>
+                        <li ng-if="checkStatus( container.Status ) == 'died'">
+                            <a tabindex="-1" href="" ng-click="startAction( key )">Start</a>
+                        </li>
+                        <li ng-if="checkStatus( container.Status ) == 'running'">
+                            <a tabindex="-1" href="" ng-click="stopAction(key)">Stop</a>
+                        </li>
+                        <li ng-if="checkStatus( container.Status ) == 'running'">
+                            <a tabindex="-1" href="" ng-click="pauseAction(key)">Pause</a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="" ng-click="restartAction(key)">Restart</a>
+                        </li>
                         <li ng-if="checkStatus( container.Status ) == 'paused'">
                             <a tabindex="-1" href="" ng-click="unpauseAction(key)">Unpause</a>
                         </li>

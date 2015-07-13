@@ -179,5 +179,13 @@ angular.module('containers', [])
                 return 'running';
             };
 
+            Object.defineProperty($scope, "queryFilter", {
+                get: function () {
+                    var out = {};
+                    out[$scope.queryBy || "$"] = $scope.query;
+                    return out;
+                }
+            });
+
             update({all: Settings.displayAll ? 1 : 0});
         }]);
